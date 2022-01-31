@@ -33,14 +33,29 @@ print_usage()
 int 
 main(int argc, char **argv)
 {
+    mpc_parser_t *number = mpc_new("number");
+    mpc_parser_t *operator = mpc_new("operator");
+    mpc_parser_t *expr = mpc_new("expr");
+    mpc_parser_t *clisp = mpc_new("clisp");
+    int status;
+
+    mpca_lang(MPCA_LANG_DEFAULT,
+              "number   : /-?[0-9]+/ ;                            "\
+              "operator : '+' | '-' | '*' | '/' ;                 "\
+              "expr     : <number> | '(' <operator> <expr>+ ')' ; "\
+              "clisp    : /^/ <operator> <expr>+ /$/ ;            ",
+              number, operator, expr, clisp);
 
     if (argc == 1) {
-        return run_repl();
+        status = run_repl();
     } else if (argc == 2) {
-        return run_file(argv[1]);
+        status = run_file(argv[1]);
     } else {
         print_usage();
-        return 1;
+        status = 1;
     }
-}
 
+    mpc_cleanup(4, number, operator, expr, clisp);
+
+    return status;
+}
