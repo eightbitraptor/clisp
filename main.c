@@ -4,16 +4,28 @@
 #include "extern/mpc/mpc.h"
 
 int
-run_repl()
+run_repl(mpc_parser_t *p)
 {
     puts("clisp version 0.0.11");
     puts("Press Ctrl+c to exit");
 
     while(1) {
+        mpc_result_t r;
+
         char *line = readline("clisp> ");
         add_history(line);
 
-        printf("clox> %s\n", line);
+        if (mpc_parse("<stdin>", line, p, &r)) {
+            // print the AST on successful parse
+            mpc_ast_print(r.output);
+            mpc_ast_delete(r.output);
+        } else {
+            // on failure print the error
+            mpc_err_print(r.error);
+            mpc_err_delete(r.error);
+        };
+
+
         free(line);
     }
 }
@@ -47,7 +59,7 @@ main(int argc, char **argv)
               number, operator, expr, clisp);
 
     if (argc == 1) {
-        status = run_repl();
+        status = run_repl(clisp);
     } else if (argc == 2) {
         status = run_file(argv[1]);
     } else {
