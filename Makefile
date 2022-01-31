@@ -1,6 +1,6 @@
 cc=clang
 
-src = $(wildcard *.c)
+src = $(wildcard *.c) extern/mpc/mpc.c
 obj = $(src:.c=.o)
 
 CFLAGS = -std=c99 -Wall

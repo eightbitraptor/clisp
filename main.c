@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <editline/readline.h>
+#include "extern/mpc/mpc.h"
 
 int
 run_repl()
