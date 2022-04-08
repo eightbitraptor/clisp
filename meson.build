@@ -12,7 +12,11 @@ mpc_dep = declare_dependency(sources: 'extern/mpc/mpc.c', include_directories: m
 cc = meson.get_compiler('c')
 readline = cc.find_library('readline')
 
+dependencies = []
+dependencies += readline
+dependencies += mpc_dep
+
 executable('clisp',
            clisp_src,
-           dependencies: [readline] + mpc_dep,
+           dependencies: dependencies,
            include_directories: mpc_inc)
