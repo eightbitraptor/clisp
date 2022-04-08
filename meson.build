@@ -3,7 +3,9 @@ project('clisp', 'c', default_options: [
   'buildtype=debug'])
 
 clisp_src = files(
-  'main.c'
+  'main.c',
+  'interpreter.h',
+  'interpreter.c',
 )
 
 mpc_inc = include_directories('extern/mpc')

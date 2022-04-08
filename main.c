@@ -8,6 +8,8 @@
 #endif
 #include "extern/mpc/mpc.h"
 
+#include "interpreter.h"
+
 int
 run_repl(mpc_parser_t *p)
 {
@@ -21,8 +23,9 @@ run_repl(mpc_parser_t *p)
         add_history(line);
 
         if (mpc_parse("<stdin>", line, p, &r)) {
-            // print the AST on successful parse
-            mpc_ast_print(r.output);
+            // eval the AST on successful parse, and print the result
+            long result = clisp_eval(r.output);
+            printf("%li\n", result);
             mpc_ast_delete(r.output);
         } else {
             // on failure print the error
